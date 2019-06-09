@@ -1,1 +1,1 @@
-# Demo_ps
+Demonstrate how to write PowerShell script
