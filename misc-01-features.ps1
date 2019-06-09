@@ -31,6 +31,7 @@ Get-PSDrive | ? { $_.Free -gt 0 } |
 { Write-Host ('total free = ' + [math]::Round($c/1gb, 1)) -BackgroundColor Magenta }
 
 # ---------- Compare process ----------
+# make sure to use () not {} for -ReferenceObject or -DifferenceObject input
 
 $fn = 'd:\temp\proc-01.xml'
 Get-Process | select name, cpu, workingset | Export-Clixml $fn
@@ -40,13 +41,13 @@ Compare-Object -ReferenceObject (Import-Clixml $fn) -DifferenceObject (Get-Proce
 
 $x = [xml](cat $fn)
 $x.Objs.Obj.ms |
-? { [math]::Round($_.db.innertext, 1) -gt 10 }  |
+? {[math]::Round($_.db.innertext, 1) -gt 10}  |
 sort { [math]::Round($_.db.'#text', 1)} -Descending |
 select -First 10 |
 Format-Table -AutoSize -Property `
-    @{ n = 'app'; e = {$_.s.innertext} }, `
-    @{ n = 'cpu'; e = {[math]::Round($_.db.innertext, 1)}}, `
-    @{ n = 'memory'; e = {[math]::Round($_.i32.'#text'/1kb, 2)}}
+    @{n = 'app'; e = {$_.s.innertext}}, `
+    @{n = 'cpu'; e = {[math]::Round($_.db.innertext, 1)}}, `
+    @{n = 'memory'; e = {[math]::Round($_.i32.'#text'/1mb, 2)}}
 
 # ---------- SQL Server with module SqlPs ----------
 
