@@ -42,7 +42,7 @@ Compare-Object -ReferenceObject (Import-Clixml $fn) -DifferenceObject (Get-Proce
 $x = [xml](cat $fn)
 $x.Objs.Obj.ms |
 ? {[math]::Round($_.db.innertext, 1) -gt 10}  |
-sort { [math]::Round($_.db.'#text', 1)} -Descending |
+sort {[math]::Round($_.db.'#text', 1)} -Descending |
 select -First 10 |
 Format-Table -AutoSize -Property `
     @{n = 'app'; e = {$_.s.innertext}}, `
