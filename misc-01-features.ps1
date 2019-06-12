@@ -55,6 +55,8 @@ $cred = Get-Credential
 
 Enter-PSSession -Credential $cred -ComputerName <computer_name>
 
+whoami
+
 # ---------- SQL Server with module SqlPs ----------
 
 Start-Service -Name 'MSSQL$SqlServer_Name'
