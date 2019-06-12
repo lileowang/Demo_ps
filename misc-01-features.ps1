@@ -48,13 +48,19 @@ Format-Table -AutoSize -Property `
     @{ n = 'cpu'; e = {[math]::Round($_.db.innertext, 1)}}, `
     @{ n = 'memory'; e = {[math]::Round($_.i32.'#text'/1kb, 2)}}
 
+# ---------- PSSession into remote computer ----------
+
+$cred = Get-Credential
+
+Enter-PSSession -Credential $cred -ComputerName <computer_name>
+
 # ---------- SQL Server with module SqlPs ----------
 
-Start-Service -Name 'MSSQL$MFGT_STATION'
+Start-Service -Name 'MSSQL$SqlServer_Name'
 Get-Service *sql*
 Get-Module -ListAvailable *sql*
 Import-Module sqlps -DisableNameChecking
-New-PSDrive -Name lwsql -Credential (Get-Credential) -PSProvider SqlServer -Root sqlserver:\sql\localhost\mfgt_station
+New-PSDrive -Name lwsql -Credential (Get-Credential) -PSProvider SqlServer -Root sqlserver:\sql\localhost\SqlServer_Name
 Get-PSDrive *sql*
 cd lwsql:\
 pwd
@@ -64,16 +70,16 @@ Invoke-Sqlcmd -Query 'select @@version'
 # ---------- SQL Server wtih module SqlServer ----------
 
 Get-Service *sql*
-Start-Service -Name 'MSSQL$MFGT_STATION'
+Start-Service -Name 'MSSQL$SqlServer_Name'
 
 get-Module -ListAvailable *sql*
 Import-Module sqlserver
 
 Get-PSDrive
 
-New-PSDrive -Name lwsql -PSProvider SqlServer -Credential (Get-Credential) -Root SQLSERVER:\SQL\localhost\mfgt_station
+New-PSDrive -Name lwsql -PSProvider SqlServer -Credential (Get-Credential) -Root SQLSERVER:\SQL\localhost\SqlServer_Name
 
-cd sqlserver:\sql\localhost\mfgt_station
+cd sqlserver:\sql\localhost\SqlServer_Name
 ls
 Invoke-Sqlcmd -Query 'select @@version'
 Invoke-Sqlcmd -Query 'select @@servername'
