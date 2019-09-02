@@ -19,12 +19,12 @@ $r = Get-Childitem $folder * -Recurse |
 
 Write-Host ("Total count: ", $r.Count)
 
-Write-Host ("name ==> size (bytes) ==> folder")
+Write-Host ("name >>> size (bytes) >>> folder")
 
 $size = 0
 foreach ($f in $r)
 {
-    Write-Host ($f.Name, ' ==> ', $f.Length, ' ==> ', $f.DirectoryName)
+    Write-Host ($f.Name, '>>>', $f.Length, '>>>', $f.DirectoryName)
     $size += $f.Length
 }
 
